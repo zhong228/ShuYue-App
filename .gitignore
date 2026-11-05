@@ -1,0 +1,48 @@
+# 纯展示仓库护栏：禁止任何源代码与工程文件进入本仓库
+# 本仓库只允许 README / 静态网页 / 声明文档
+
+# 原生与跨平台源码
+*.swift
+*.m
+*.mm
+*.h
+*.kt
+*.kts
+*.java
+*.gradle
+*.pbxproj
+*.xcconfig
+*.entitlements
+*.plist
+*.xcassets/
+*.lproj/
+
+# 工程与构建目录
+app/
+src/
+Sources/
+Modules/
+Targets/
+Packages/
+android/
+ios/
+build/
+gradle/
+*.xcodeproj/
+*.xcworkspace/
+
+# 二进制与凭据（安装包只走 Releases，不进仓库）
+*.ipa
+*.apk
+*.aab
+*.keystore
+*.jks
+*.p12
+*.mobileprovision
+.env
+*token*
+*secret*
+
+# 系统
+.DS_Store
+Thumbs.db
