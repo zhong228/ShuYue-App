@@ -42,10 +42,15 @@
   .btn.android{background:linear-gradient(135deg,#7fd6a2,#4fae7c);color:#0e1c14}
   .btn.off{background:#232b37;color:#6d7a8c;cursor:default;pointer-events:none}
   .note{font-size:11.5px;color:#6f7c8e;margin-top:13px;line-height:1.6}
-  .notice{margin-top:30px;background:rgba(200,160,106,.06);border:1px solid rgba(200,160,106,.24);
+  .mirror{margin-top:20px;background:rgba(104,196,141,.06);border:1px solid rgba(104,196,141,.22);
+    border-radius:10px;padding:14px 18px;font-size:13px;color:var(--sub)}
+  .mirror label{cursor:pointer;color:var(--txt);font-weight:600;display:flex;align-items:center;gap:9px}
+  .mirror input{accent-color:var(--android);width:16px;height:16px}
+  .mirror .hint{font-size:11.5px;color:#6f7c8e;margin:8px 0 0 25px;line-height:1.6}
+  .notice{margin-top:22px;background:rgba(200,160,106,.06);border:1px solid rgba(200,160,106,.24);
     border-left:3px solid var(--gold);border-radius:10px;padding:16px 20px;font-size:13px;color:var(--sub)}
   .notice b{color:var(--gold2)}
-  .feat{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-top:44px}
+  .feat{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-top:36px}
   .feat div{background:rgba(255,255,255,.02);border:1px solid var(--line);border-radius:10px;
     padding:14px 16px;font-size:13px;color:var(--sub)}
   .feat b{display:block;color:var(--txt);font-size:13.5px;margin-bottom:4px;font-weight:600}
@@ -83,6 +88,11 @@
     </div>
   </div>
 
+  <div class="mirror">
+    <label><input type="checkbox" id="mirror-toggle" checked> 使用国内镜像加速下载（推荐中国大陆用户）</label>
+    <div class="hint">下载慢、打不开或中途断开时保持勾选即可自动走国内镜像；取消勾选则使用 GitHub 官方直链。镜像只加速公开安装包，源码仓库始终私有。</div>
+  </div>
+
   <div class="notice">
     <b>关于源代码</b>　本仓库仅用于展示与分发安装包，<b>不包含任何源代码</b>。源码仓库为私有，不对外开放，也不接受 fork、镜像或协作请求。fork 本仓库只会得到一份 README 与一个网页，无法获得任何实现细节。请勿反编译、二次分发或冒用「书悦 / ShuYue」名称发布衍生版本。
   </div>
@@ -105,28 +115,42 @@
 <script>
 (function(){
   var API='https://api.github.com/repos/zhong228/ShuYue-App/releases/latest';
+  var MIRROR='https://gh-proxy.com/';
+  var links={};
   function size(b){return b?(b/1024/1024).toFixed(1)+' MB':''}
-  function bind(kind,ext,btnId,noteId,metaId,label){
+  function applyMirror(){
+    var on=document.getElementById('mirror-toggle').checked;
+    ['ios-btn','apk-btn'].forEach(function(id){
+      var b=document.getElementById(id);
+      if(links[id])b.href=on?MIRROR+links[id]:links[id];
+    });
+  }
+  function bind(kind,btnId,noteId,metaId,label){
     var btn=document.getElementById(btnId), note=document.getElementById(noteId);
     return function(a){
       if(!a){note.textContent=label+'安装包尚未发布，敬请期待';return}
-      btn.href=a.browser_download_url;
+      links[btnId]=a.browser_download_url;
       btn.className='btn '+kind;
       btn.textContent='下载 '+label+'安装包 · '+size(a.size);
       note.textContent=a.name+' · '+size(a.size)+' · 下载 '+a.download_count+' 次';
       if(metaId)document.getElementById(metaId).innerHTML=
         (kind==='ios'?'未签名 IPA · iOS 16.0 及以上':'APK · Android 8.0 及以上')+
         '<br>构建于 '+new Date(a.updated_at).toLocaleDateString('zh-CN');
+      applyMirror();
     }
   }
+  document.getElementById('mirror-toggle').addEventListener('change',function(){
+    applyMirror();
+    document.getElementById('status').textContent=this.checked?'已启用国内镜像加速':'已切换为 GitHub 官方直链';
+  });
   fetch(API,{headers:{'Accept':'application/vnd.github+json'}})
     .then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json()})
     .then(function(d){
       document.getElementById('ver').textContent='最新版本 '+(d.tag_name||'');
       document.getElementById('status').textContent='';
       var as=d.assets||[];
-      bind('ios','.ipa','ios-btn','ios-note','ios-meta','iOS')(as.filter(function(a){return /\.ipa$/.test(a.name)})[0]);
-      bind('android','.apk','apk-btn','apk-note','apk-meta','Android')(as.filter(function(a){return /\.apk$/.test(a.name)})[0]);
+      bind('ios','ios-btn','ios-note','ios-meta','iOS')(as.filter(function(a){return /\.ipa$/.test(a.name)})[0]);
+      bind('android','apk-btn','apk-note','apk-meta','Android')(as.filter(function(a){return /\.apk$/.test(a.name)})[0]);
     })
     .catch(function(e){
       document.getElementById('ver').textContent='版本信息暂不可用';
