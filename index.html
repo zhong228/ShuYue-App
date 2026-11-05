@@ -37,16 +37,16 @@
   .card .meta{color:var(--sub);font-size:12.5px;min-height:40px;margin:8px 0 18px}
   .btn{display:block;text-align:center;padding:12px 16px;border-radius:10px;text-decoration:none;
     font-size:14px;font-weight:600;transition:opacity .18s}
-  .btn:not(.off):hover{opacity:.85}
+  .btn:hover{opacity:.85}
   .btn.ios{background:linear-gradient(135deg,#b9c8da,#8ea4bd);color:#131820}
   .btn.android{background:linear-gradient(135deg,#7fd6a2,#4fae7c);color:#0e1c14}
-  .btn.off{background:#232b37;color:#6d7a8c;cursor:default;pointer-events:none}
   .note{font-size:11.5px;color:#6f7c8e;margin-top:13px;line-height:1.6}
   .mirror{margin-top:20px;background:rgba(104,196,141,.06);border:1px solid rgba(104,196,141,.22);
     border-radius:10px;padding:14px 18px;font-size:13px;color:var(--sub)}
-  .mirror label{cursor:pointer;color:var(--txt);font-weight:600;display:flex;align-items:center;gap:9px}
-  .mirror input{accent-color:var(--android);width:16px;height:16px}
-  .mirror .hint{font-size:11.5px;color:#6f7c8e;margin:8px 0 0 25px;line-height:1.6}
+  .mirror label{display:block;color:var(--txt);font-weight:600;margin-bottom:9px}
+  .mirror select{width:100%;background:#111720;color:var(--txt);border:1px solid var(--line);
+    border-radius:8px;padding:9px 12px;font-size:13px;font-family:inherit;outline:none;cursor:pointer}
+  .mirror .hint{font-size:11.5px;color:#6f7c8e;margin:9px 0 0;line-height:1.6}
   .notice{margin-top:22px;background:rgba(200,160,106,.06);border:1px solid rgba(200,160,106,.24);
     border-left:3px solid var(--gold);border-radius:10px;padding:16px 20px;font-size:13px;color:var(--sub)}
   .notice b{color:var(--gold2)}
@@ -67,7 +67,7 @@
     <h1>书悦</h1>
     <div class="en">ShuYue</div>
     <div class="slogan">把阅读还给阅读本身 · 安静地读一本书</div>
-    <div class="ver" id="ver">正在获取最新版本…</div>
+    <div class="ver" id="ver">最新版本 v1.3.53</div>
     <div id="status"></div>
   </div>
 
@@ -76,21 +76,26 @@
       <div class="ic ios">iOS</div>
       <h2>iPhone / iPad</h2>
       <div class="meta" id="ios-meta">未签名 IPA · iOS 16.0 及以上<br>需巨魔商店或自签名安装</div>
-      <a class="btn ios off" id="ios-btn" href="https://github.com/zhong228/ShuYue-App/releases/latest">获取安装包</a>
-      <div class="note" id="ios-note">正在检查最新版本…</div>
+      <a class="btn ios" id="ios-btn" href="https://cdn.akaere.online/https://github.com/zhong228/ShuYue-App/releases/download/v1.3.53/ShuYue-v1.3.53.ipa">下载 iOS 安装包 · 37.5 MB</a>
+      <div class="note" id="ios-note">ShuYue-v1.3.53.ipa · 37.5 MB</div>
     </div>
     <div class="card">
       <div class="ic android">APK</div>
       <h2>Android</h2>
       <div class="meta" id="apk-meta">APK · Android 8.0 及以上<br>下载后直接安装</div>
-      <a class="btn android off" id="apk-btn" href="https://github.com/zhong228/ShuYue-App/releases/latest">获取安装包</a>
-      <div class="note" id="apk-note">正在检查最新版本…</div>
+      <a class="btn android" id="apk-btn" href="https://cdn.akaere.online/https://github.com/zhong228/ShuYue-App/releases/download/v1.3.53/ShuYue-v1.3.53.apk">下载 Android 安装包 · 17.4 MB</a>
+      <div class="note" id="apk-note">ShuYue-v1.3.53.apk · 17.4 MB · 无需账号，下载后直接安装</div>
     </div>
   </div>
 
   <div class="mirror">
-    <label><input type="checkbox" id="mirror-toggle" checked> 使用国内镜像加速下载（推荐中国大陆用户）</label>
-    <div class="hint">下载慢、打不开或中途断开时保持勾选即可自动走国内镜像；取消勾选则使用 GitHub 官方直链。镜像只加速公开安装包，源码仓库始终私有。</div>
+    <label for="mirror-select">下载线路</label>
+    <select id="mirror-select">
+      <option value="0" selected>国内镜像 · cdn.akaere.online（推荐，实测最快）</option>
+      <option value="1">国内镜像 · gh-proxy.com（备用线路）</option>
+      <option value="2">GitHub 官方直链（境外网络）</option>
+    </select>
+    <div class="hint">默认走 akaere CDN，下载慢、打不开或中途断开就换一条线路。镜像只加速公开安装包，源码仓库始终私有。<b>即使版本信息加载失败，上方两个按钮也始终可以直接下载</b>，不需要等待任何接口。</div>
   </div>
 
   <div class="notice">
@@ -114,49 +119,57 @@
 </div>
 <script>
 (function(){
-  var API='https://api.github.com/repos/zhong228/ShuYue-App/releases/latest';
-  var MIRROR='https://gh-proxy.com/';
-  var links={};
+  /* 静态直链：页面打开即可下载，完全不依赖任何接口 */
+  var ASSETS={
+    'ios-btn':'https://github.com/zhong228/ShuYue-App/releases/download/v1.3.53/ShuYue-v1.3.53.ipa',
+    'apk-btn':'https://github.com/zhong228/ShuYue-App/releases/download/v1.3.53/ShuYue-v1.3.53.apk'
+  };
+  var MIRRORS=[
+    {name:'cdn.akaere.online',prefix:'https://cdn.akaere.online/'},
+    {name:'gh-proxy.com',prefix:'https://gh-proxy.com/'},
+    {name:'GitHub 官方直链',prefix:''}
+  ];
+  var sel=document.getElementById('mirror-select');
   function size(b){return b?(b/1024/1024).toFixed(1)+' MB':''}
-  function applyMirror(){
-    var on=document.getElementById('mirror-toggle').checked;
+  function current(){return MIRRORS[parseInt(sel.value,10)||0]}
+  function apply(){
+    var m=current();
     ['ios-btn','apk-btn'].forEach(function(id){
       var b=document.getElementById(id);
-      if(links[id])b.href=on?MIRROR+links[id]:links[id];
+      if(ASSETS[id])b.href=m.prefix+ASSETS[id];
     });
+    document.getElementById('status').textContent = m.prefix
+      ? '当前线路：'+m.name+' · 下载已就绪'
+      : '当前线路：GitHub 官方直链（中国大陆可能无法打开，建议换回国内镜像）';
   }
-  function bind(kind,btnId,noteId,metaId,label){
-    var btn=document.getElementById(btnId), note=document.getElementById(noteId);
-    return function(a){
-      if(!a){note.textContent=label+'安装包尚未发布，敬请期待';return}
-      links[btnId]=a.browser_download_url;
-      btn.className='btn '+kind;
-      btn.textContent='下载 '+label+'安装包 · '+size(a.size);
-      note.textContent=a.name+' · '+size(a.size)+' · 下载 '+a.download_count+' 次';
-      if(metaId)document.getElementById(metaId).innerHTML=
-        (kind==='ios'?'未签名 IPA · iOS 16.0 及以上':'APK · Android 8.0 及以上')+
-        '<br>构建于 '+new Date(a.updated_at).toLocaleDateString('zh-CN');
-      applyMirror();
-    }
-  }
-  document.getElementById('mirror-toggle').addEventListener('change',function(){
-    applyMirror();
-    document.getElementById('status').textContent=this.checked?'已启用国内镜像加速':'已切换为 GitHub 官方直链';
-  });
-  fetch(API,{headers:{'Accept':'application/vnd.github+json'}})
+  sel.addEventListener('change',apply);
+  apply();
+
+  /* 增强项：走镜像查询最新版本。失败也完全不影响静态下载按钮 */
+  var API='https://api.github.com/repos/zhong228/ShuYue-App/releases/latest';
+  var apiUrl=(current().prefix||'https://gh-proxy.com/')+API;
+  fetch(apiUrl,{headers:{'Accept':'application/vnd.github+json'}})
     .then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json()})
     .then(function(d){
-      document.getElementById('ver').textContent='最新版本 '+(d.tag_name||'');
-      document.getElementById('status').textContent='';
+      if(d.tag_name)document.getElementById('ver').textContent='最新版本 '+d.tag_name;
       var as=d.assets||[];
-      bind('ios','ios-btn','ios-note','ios-meta','iOS')(as.filter(function(a){return /\.ipa$/.test(a.name)})[0]);
-      bind('android','apk-btn','apk-note','apk-meta','Android')(as.filter(function(a){return /\.apk$/.test(a.name)})[0]);
+      [['ios-btn','ios-note','ios-meta','iOS',/\.ipa$/],
+       ['apk-btn','apk-note','apk-meta','Android',/\.apk$/]].forEach(function(cfg){
+        var a=as.filter(function(x){return cfg[4].test(x.name)})[0];
+        if(!a)return;
+        ASSETS[cfg[0]]=a.browser_download_url;
+        var btn=document.getElementById(cfg[0]);
+        btn.textContent='下载 '+cfg[3]+'安装包 · '+size(a.size);
+        document.getElementById(cfg[1]).textContent=a.name+' · '+size(a.size)+' · 下载 '+a.download_count+' 次';
+        document.getElementById(cfg[2]).innerHTML=
+          (cfg[3]==='iOS'?'未签名 IPA · iOS 16.0 及以上':'APK · Android 8.0 及以上')+
+          '<br>构建于 '+new Date(a.updated_at).toLocaleDateString('zh-CN');
+      });
+      apply();
     })
-    .catch(function(e){
-      document.getElementById('ver').textContent='版本信息暂不可用';
-      document.getElementById('status').textContent='请前往 Releases 页面查看下载';
-      document.getElementById('ios-note').textContent='请前往 Releases 页面下载';
-      document.getElementById('apk-note').textContent='请前往 Releases 页面下载';
+    .catch(function(){
+      document.getElementById('status').textContent='当前线路：'+current().name+
+        ' · 实时版本信息暂不可用，但不影响下载，直接点上方按钮即可';
     });
 })();
 </script>
