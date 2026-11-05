@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>书悦 ShuYue · 官方下载</title>
+<meta name="description" content="书悦 ShuYue 官方安装包下载：iOS / iPadOS 与 Android。">
+<style>
+  :root{
+    --bg:#0d1015;--bg2:#141922;--card:#181e28;--line:#28313f;
+    --txt:#e9eef6;--sub:#93a0b3;--gold:#c8a06a;--gold2:#e6c795;
+    --ios:#9fb2c9;--android:#68c48d;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:radial-gradient(1100px 620px at 50% -12%,#1d2531 0%,var(--bg) 62%);
+    color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+    line-height:1.7;min-height:100vh;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:880px;margin:0 auto;padding:64px 20px 70px}
+  .hero{text-align:center;margin-bottom:52px}
+  .logo{width:74px;height:74px;margin:0 auto 22px;border-radius:20px;
+    background:linear-gradient(140deg,var(--gold2),#8c6a3c);color:#241a0c;font-size:36px;font-weight:800;
+    display:flex;align-items:center;justify-content:center;box-shadow:0 14px 38px rgba(200,160,106,.22)}
+  h1{font-size:38px;letter-spacing:6px;margin:0 0 6px;font-weight:700}
+  .en{color:var(--gold);letter-spacing:5px;font-size:13px;text-transform:uppercase}
+  .slogan{color:var(--sub);font-size:15px;margin-top:18px;letter-spacing:1px}
+  .ver{display:inline-block;margin-top:20px;padding:5px 15px;border:1px solid var(--line);
+    border-radius:20px;font-size:12.5px;color:var(--sub);background:rgba(255,255,255,.02)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:26px 24px;
+    transition:transform .18s ease,border-color .18s ease}
+  .card:hover{transform:translateY(-3px);border-color:#3b4759}
+  .card .ic{width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;
+    font-size:19px;font-weight:700;margin-bottom:16px}
+  .ic.ios{background:rgba(159,178,201,.13);color:var(--ios)}
+  .ic.android{background:rgba(104,196,141,.13);color:var(--android)}
+  .card h2{font-size:19px;margin:0 0 4px}
+  .card .meta{color:var(--sub);font-size:12.5px;min-height:40px;margin:8px 0 18px}
+  .btn{display:block;text-align:center;padding:12px 16px;border-radius:10px;text-decoration:none;
+    font-size:14px;font-weight:600;transition:opacity .18s}
+  .btn:not(.off):hover{opacity:.85}
+  .btn.ios{background:linear-gradient(135deg,#b9c8da,#8ea4bd);color:#131820}
+  .btn.android{background:linear-gradient(135deg,#7fd6a2,#4fae7c);color:#0e1c14}
+  .btn.off{background:#232b37;color:#6d7a8c;cursor:default;pointer-events:none}
+  .note{font-size:11.5px;color:#6f7c8e;margin-top:13px;line-height:1.6}
+  .notice{margin-top:30px;background:rgba(200,160,106,.06);border:1px solid rgba(200,160,106,.24);
+    border-left:3px solid var(--gold);border-radius:10px;padding:16px 20px;font-size:13px;color:var(--sub)}
+  .notice b{color:var(--gold2)}
+  .feat{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-top:44px}
+  .feat div{background:rgba(255,255,255,.02);border:1px solid var(--line);border-radius:10px;
+    padding:14px 16px;font-size:13px;color:var(--sub)}
+  .feat b{display:block;color:var(--txt);font-size:13.5px;margin-bottom:4px;font-weight:600}
+  footer{margin-top:54px;padding-top:22px;border-top:1px solid var(--line);
+    text-align:center;color:#6f7c8e;font-size:12px}
+  footer a{color:var(--gold);text-decoration:none}
+  #status{text-align:center;color:var(--sub);font-size:12.5px;margin-top:14px;min-height:18px}
+</style>
+</head>
+<body><div class="wrap">
+
+  <div class="hero">
+    <div class="logo">书</div>
+    <h1>书悦</h1>
+    <div class="en">ShuYue</div>
+    <div class="slogan">把阅读还给阅读本身 · 安静地读一本书</div>
+    <div class="ver" id="ver">正在获取最新版本…</div>
+    <div id="status"></div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <div class="ic ios">iOS</div>
+      <h2>iPhone / iPad</h2>
+      <div class="meta" id="ios-meta">未签名 IPA · iOS 16.0 及以上<br>需巨魔商店或自签名安装</div>
+      <a class="btn ios off" id="ios-btn" href="https://github.com/zhong228/ShuYue-App/releases/latest">获取安装包</a>
+      <div class="note" id="ios-note">正在检查最新版本…</div>
+    </div>
+    <div class="card">
+      <div class="ic android">APK</div>
+      <h2>Android</h2>
+      <div class="meta" id="apk-meta">APK · Android 8.0 及以上<br>下载后直接安装</div>
+      <a class="btn android off" id="apk-btn" href="https://github.com/zhong228/ShuYue-App/releases/latest">获取安装包</a>
+      <div class="note" id="apk-note">正在检查最新版本…</div>
+    </div>
+  </div>
+
+  <div class="notice">
+    <b>关于源代码</b>　本仓库仅用于展示与分发安装包，<b>不包含任何源代码</b>。源码仓库为私有，不对外开放，也不接受 fork、镜像或协作请求。fork 本仓库只会得到一份 README 与一个网页，无法获得任何实现细节。请勿反编译、二次分发或冒用「书悦 / ShuYue」名称发布衍生版本。
+  </div>
+
+  <div class="feat">
+    <div><b>多格式</b>EPUB / PDF / TXT 与在线书源</div>
+    <div><b>书源自由</b>自定义规则聚合正文</div>
+    <div><b>排版讲究</b>字号行距主题逐项可调</div>
+    <div><b>本地优先</b>进度书签书摘留在设备</div>
+    <div><b>纯净</b>无广告、无推荐、无账号墙</div>
+    <div><b>双端</b>iOS 与 Android 同步发布</div>
+  </div>
+
+  <footer>
+    书悦 ShuYue · <a href="https://github.com/zhong228/ShuYue-App/releases">全部历史版本</a> · <a href="TRADEMARKS.md">商标声明</a>
+    <br>本页仅分发安装包，不提供源代码。
+  </footer>
+
+</div>
+<script>
+(function(){
+  var API='https://api.github.com/repos/zhong228/ShuYue-App/releases/latest';
+  function size(b){return b?(b/1024/1024).toFixed(1)+' MB':''}
+  function bind(kind,ext,btnId,noteId,metaId,label){
+    var btn=document.getElementById(btnId), note=document.getElementById(noteId);
+    return function(a){
+      if(!a){note.textContent=label+'安装包尚未发布，敬请期待';return}
+      btn.href=a.browser_download_url;
+      btn.className='btn '+kind;
+      btn.textContent='下载 '+label+'安装包 · '+size(a.size);
+      note.textContent=a.name+' · '+size(a.size)+' · 下载 '+a.download_count+' 次';
+      if(metaId)document.getElementById(metaId).innerHTML=
+        (kind==='ios'?'未签名 IPA · iOS 16.0 及以上':'APK · Android 8.0 及以上')+
+        '<br>构建于 '+new Date(a.updated_at).toLocaleDateString('zh-CN');
+    }
+  }
+  fetch(API,{headers:{'Accept':'application/vnd.github+json'}})
+    .then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json()})
+    .then(function(d){
+      document.getElementById('ver').textContent='最新版本 '+(d.tag_name||'');
+      document.getElementById('status').textContent='';
+      var as=d.assets||[];
+      bind('ios','.ipa','ios-btn','ios-note','ios-meta','iOS')(as.filter(function(a){return /\.ipa$/.test(a.name)})[0]);
+      bind('android','.apk','apk-btn','apk-note','apk-meta','Android')(as.filter(function(a){return /\.apk$/.test(a.name)})[0]);
+    })
+    .catch(function(e){
+      document.getElementById('ver').textContent='版本信息暂不可用';
+      document.getElementById('status').textContent='请前往 Releases 页面查看下载';
+      document.getElementById('ios-note').textContent='请前往 Releases 页面下载';
+      document.getElementById('apk-note').textContent='请前往 Releases 页面下载';
+    });
+})();
+</script>
+</body></html>
